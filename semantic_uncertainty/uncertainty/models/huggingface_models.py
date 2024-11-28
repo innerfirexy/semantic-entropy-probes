@@ -358,7 +358,7 @@ class HuggingfaceModel(BaseModel):
         transition_scores = self.model.compute_transition_scores(
             outputs.sequences, outputs.scores, normalize_logits=True)
         # log_likelihoods = [score.item() for score in transition_scores[0]] # => score.item() results in zero
-        log_likelihoods = [score for score in transition_scores[0]] # https://huggingface.co/docs/transformers/main/en/main_classes/text_generation#transformers.GenerationMixin.compute_transition_scores
+        log_likelihoods = [score.cpu().numpy() for score in transition_scores[0]] # https://huggingface.co/docs/transformers/main/en/main_classes/text_generation#transformers.GenerationMixin.compute_transition_scores
         if len(log_likelihoods) == 1:
             logging.warning('Taking first and only generation for log likelihood!')
             log_likelihoods = log_likelihoods
